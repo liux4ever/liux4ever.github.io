@@ -125,7 +125,8 @@
 }
 
 .header .header-top .h-right .select .dot {
-    display: inline-block;
+    /* display: inline-block; */
+    display: none;
     width: 5px;
     height: 5px;
     border-radius: 50%;
