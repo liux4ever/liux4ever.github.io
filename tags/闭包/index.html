@@ -3,7 +3,7 @@
 
 	<head>
 		
-<title>test文章</title>
+<title>标签:闭包</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -20,13 +20,7 @@
 
 	<body>
 		
-<link rel="stylesheet" href="/css/page.css">
-
-
-<link rel="stylesheet" href="/css/page_cente.css">
-
-
-<link rel="stylesheet" href="/css/atom-one-dark.css">
+<link rel="stylesheet" href="/css/tag.css">
 
 
 <link rel="stylesheet" href="/css/header.css">
@@ -69,13 +63,13 @@
 								
 									
 						
-								<li>
-									<a href="/tags">
-										标签
-									</a>
-									<span class="dot"></span>
-								</li>
-								
+							<li class="select">
+								<a href="/tags">
+									标签
+								</a>
+								<span class="dot"></span>
+							</li>
+							
 									
 						
 								<li>
@@ -226,82 +220,32 @@
 		<script>
 			$(function () { $(window).scroll(function () { if ($(document).scrollTop() > 100) { $(".header-top").removeClass("header-move2"); $('.header-top').addClass('header-move1') } else { $(".header-top").removeClass("header-move1"); $('.header-top').addClass('header-move2') } }) });
 		</script>
-<div class="header-bg bg-content-img">
+
+<div class="header-bg">
     <div class="bg-content">
-        <ul class="tag">
-            
-        </ul>
-        <h1>test文章</h1>
-        <div class="article-info">
-            <div class="article-author">
-                
-                <svg t="1604839279282" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                    xmlns="http://www.w3.org/2000/svg" p-id="2901" width="20" height="20">
-                    <path
-                        d="M513 956.3c-247.7 0-448-200.3-448-448S265.3 66.2 513 66.2s448 200.3 448 448-200.3 442.1-448 442.1z m0-830.9c-212.2 0-388.8 170.7-388.8 388.8C124.2 726.3 294.9 903 513 903c212.2 0 388.8-170.7 388.8-388.8S725.2 125.4 513 125.4z m0 430.2c-94.2 0-170.7-76.5-170.7-170.7S418.8 207.8 513 207.8s170.7 76.5 170.7 170.7S607.2 555.6 513 555.6z m0-289.1c-64.6 0-112 52.8-112 112s47.4 117.9 112 117.9 112-52.8 112-112-47.4-117.9-112-117.9z m0 689.8c-135.7 0-259-58.7-341.9-158.9l-11.8-17.8 11.8-17.8c76.5-117.9 206.2-188.5 347.8-188.5 135.7 0 265 64.6 341.9 182.6l11.8 17.8-11.8 17.8C778 897.1 648.7 956.3 513 956.3zM230.3 773.2C300.9 849.7 406.9 897 513 897c112 0 218.1-47.4 288.6-129.8-70.5-88.2-170.7-135.6-282.7-135.6s-218.1 53.3-288.6 141.6z"
-                        p-id="2902" fill="#ffffff"></path>
-                </svg>
-                
-                <span> <a href="">Lau</a></span>
-                <p>2021-05-15 18:50:36</p>
-            </div>
-        </div>
+        <!-- <span>
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imgtags.svg" alt="Q">
+        </span> -->
+        <h2> 闭包 </h2>
     </div>
 </div>
 <div class="article-content">
     <div id="article" class="content">
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
+        <div class="list-group">
+            
+            
+            
+            <p class="h5">2021</p>
+            
+            <a href="/2021/05/19/20210519_closure/" class="list-group-item list-group-item-action">
+                <span class="archive-post-title">深入理解JS闭包及作用域链</span>
+                <time style="float: right;">05-19</time>
+            </a>
+            
+        </div>
     </div>
 </div>
-<style>
-    #noneimg img {
-        display: none;
-        z-index: 109;
-        width: 600px !important;
-        border-radius: 0px;
-        position: fixed;
-        box-shadow: 0 0 0px #c3c3c300 !important;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        margin: auto !important;
-    }
-
-    @media screen and (max-width:600px) {
-        #noneimg img {
-            width: 88%
-        }
-    }
-</style>
-<script>
-    $(function () { $('#article').click(function (e) { if (e.target.tagName == "IMG") { if ($('#nonediv').length == 0) { let MImg = `<div id='noneimg'><img src='${e.target.currentSrc}'></div>`; let MDiv = "<div id='nonediv' style='cursor: pointer;display: none; position: fixed;left: 0;top: 0; right: 0;bottom: 0;background-color: #333;opacity:0.5;z-index: 108;'></div>"; $('#article').append(MDiv); $('#article').append(MImg); $("#nonediv").fadeIn("slow"); $("#noneimg img").fadeIn("slow") } } else { if ($('#nonediv').length !== 0) { $("#noneimg ").fadeOut("slow"); $("#nonediv").fadeOut("slow"); setTimeout(function () { $('#nonediv').remove(); $('#noneimg').remove() }, 500) } } }); $('.article-content').addClass('content-move') });
-</script>
-<div class="Last-Next">
-    
-    <a href="/2021/05/19/20210519_closure/">
-        <div class="last">
-            <span>上一篇</span>
-            <p>深入理解JS闭包及作用域链</p>
-        </div>
-    </a>
-    
-
-    
-</div>
+<script>$(function () { $('.article-content').addClass('content-move') });</script>
 		
 <link rel="stylesheet" href="/css/food.css">
 

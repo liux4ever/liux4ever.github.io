@@ -3,14 +3,15 @@
 
 	<head>
 		
-<title>test文章</title>
+<title>深入理解JS闭包及作用域链</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" type="image/x-icon" href="/image/logo.png">
 
-<meta name="keywords" content="个人博客,前端博客">
-<meta name="description" content="描述">
+
+<meta name="keywords" content="闭包,">
+<meta name="description" content="">
 
 
 <script src="/js/jquery.min.js"></script>
@@ -230,8 +231,12 @@
     <div class="bg-content">
         <ul class="tag">
             
+            
+            <li><a href="/tags/闭包">闭包</a></li>
+            
+            
         </ul>
-        <h1>test文章</h1>
+        <h1>深入理解JS闭包及作用域链</h1>
         <div class="article-info">
             <div class="article-author">
                 
@@ -243,26 +248,39 @@
                 </svg>
                 
                 <span> <a href="">Lau</a></span>
-                <p>2021-05-15 18:50:36</p>
+                <p>2021-05-19 23:30:21</p>
             </div>
         </div>
     </div>
 </div>
 <div class="article-content">
     <div id="article" class="content">
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+        <h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><p>通常对闭包的定义：能够读取其他函数内部变量的函数。</p>
+<p>例如下面一段代码</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test1</span>(<span class="hljs-params"></span>)</span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test2</span>(<span class="hljs-params"></span>)</span>&#123;<br>        <span class="hljs-keyword">var</span> b = <span class="hljs-number">2</span>;<br>        <span class="hljs-built_in">console</span>.log(a);<br>    &#125;<br>    <span class="hljs-keyword">var</span> a = <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">return</span> test2;<br>&#125;<br><span class="hljs-keyword">var</span> c = <span class="hljs-number">3</span>;<br><span class="hljs-keyword">var</span> test3 = test1();<br>test3();<br></code></pre></td></tr></table></figure>
+<p>执行的结果是什么？</p>
+<p>显然结果是 1</p>
+<p>那么是如何打印出这个 1 的，我们从闭包和作用域链的角度去理解。</p>
+<p>在理解闭包和作用域链之前，首先需要知道两个概念：GO和AO</p>
+<h2 id="GO和AO"><a href="#GO和AO" class="headerlink" title="GO和AO"></a>GO和AO</h2><p><strong>GO：global object 指全局上下文</strong></p>
+<p><strong>AO：activation object 指函数上下文</strong></p>
+<p>如果变量是在函数内部定义，会存入当前函数的上下文中，即AO。</p>
+<p>如果变量是在全局定义，会存入GO中。</p>
+<h2 id="执行机制"><a href="#执行机制" class="headerlink" title="执行机制"></a>执行机制</h2><p><img src="/image/post1/post1_1.png" alt="image"></p>
+<p>从上往下执行，首先定义test1函数，如上图。test1、c、test3属于全局变量，保存到GO中。</p>
+<p>此时test1的作用域链保存了GO。</p>
+<p><img src="/image/post1/post1_2.png" alt="image"></p>
+<p>接下来，test1执行。</p>
+<p>因为test1内部有变量声明，此时产生test1的AO，即test1自己的函数上下文，存到test1的作用域链中，且执行顺序在GO前（以栈的方式）。</p>
+<p>变量a、test2存到test1的AO中。</p>
+<p><img src="/image/post1/post1_3.png" alt="image"></p>
+<p>当test1执行时，test2也被定义，此时产生test2的AO，test2的作用域链中存入它的上级环境即test1的AO。</p>
+<p><strong>此时test1和test2的作用域链都存着test1的AO。</strong></p>
+<p>当test1执行完时，test1作用域链中的AO已经结束，但是 <strong>test2中的作用域链仍指向est1的AO</strong> ，此时即形成了 <strong>闭包</strong>，test2仍可以访问test1中的变量。</p>
+<p>至此，我们可以清晰的看到闭包是如何形成的。</p>
+<p>最终，test3()实际上执行的test2()，因为test1()执行完已经结束，返回了test2。<br>当test2执行时，生成了自己的AO，保存了变量b。</p>
+<p>当执行console.log(a)时，首先在当前的执行上下文，也就是test2的AO中查找，如果没有，继续往上一层环境找，我们在test1的AO中找到了变量a，因此最终打印结果为1，且test2的AO被销毁。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过上述的示例我们可以清晰的了解闭包的概念，以及函数作用域链的执行方式。</p>
 
     </div>
 </div>
@@ -292,14 +310,14 @@
 </script>
 <div class="Last-Next">
     
-    <a href="/2021/05/19/20210519_closure/">
-        <div class="last">
-            <span>上一篇</span>
-            <p>深入理解JS闭包及作用域链</p>
+
+    
+    <a href="/2021/05/15/test/">
+        <div class="next">
+            <span>下一篇</span>
+            <p>test文章</p>
         </div>
     </a>
-    
-
     
 </div>
 		
