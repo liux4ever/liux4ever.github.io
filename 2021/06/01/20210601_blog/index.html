@@ -3,15 +3,14 @@
 
 	<head>
 		
-<title>深入理解JS闭包及作用域链</title>
+<title>Hexo + Github Pages 搭建个人博客</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" type="image/x-icon" href="/image/logo.png">
 
-
-<meta name="keywords" content="闭包,">
-<meta name="description" content="">
+<meta name="keywords" content="个人博客,前端博客">
+<meta name="description" content="描述">
 
 
 <script src="/js/jquery.min.js"></script>
@@ -231,12 +230,8 @@
     <div class="bg-content">
         <ul class="tag">
             
-            
-            <li><a href="/tags/闭包">闭包</a></li>
-            
-            
         </ul>
-        <h1>深入理解JS闭包及作用域链</h1>
+        <h1>Hexo + Github Pages 搭建个人博客</h1>
         <div class="article-info">
             <div class="article-author">
                 
@@ -248,39 +243,81 @@
                 </svg>
                 
                 <span> <a href="">Lau</a></span>
-                <p>2021-05-19 23:30:21</p>
+                <p>2021-06-01 19:25:00</p>
             </div>
         </div>
     </div>
 </div>
 <div class="article-content">
     <div id="article" class="content">
-        <h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><p>通常对闭包的定义：能够读取其他函数内部变量的函数。</p>
-<p>例如下面一段代码</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test1</span>(<span class="hljs-params"></span>)</span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test2</span>(<span class="hljs-params"></span>)</span>&#123;<br>        <span class="hljs-keyword">var</span> b = <span class="hljs-number">2</span>;<br>        <span class="hljs-built_in">console</span>.log(a);<br>    &#125;<br>    <span class="hljs-keyword">var</span> a = <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">return</span> test2;<br>&#125;<br><span class="hljs-keyword">var</span> c = <span class="hljs-number">3</span>;<br><span class="hljs-keyword">var</span> test3 = test1();<br>test3();<br></code></pre></td></tr></table></figure>
-<p>执行的结果是什么？</p>
-<p>显然结果是 1</p>
-<p>那么是如何打印出这个 1 的，我们从闭包和作用域链的角度去理解。</p>
-<p>在理解闭包和作用域链之前，首先需要知道两个概念：GO和AO</p>
-<h2 id="GO和AO"><a href="#GO和AO" class="headerlink" title="GO和AO"></a>GO和AO</h2><p><strong>GO：global object 指全局上下文</strong></p>
-<p><strong>AO：activation object 指函数上下文</strong></p>
-<p>如果变量是在函数内部定义，会存入当前函数的上下文中，即AO。</p>
-<p>如果变量是在全局定义，会存入GO中。</p>
-<h2 id="执行机制"><a href="#执行机制" class="headerlink" title="执行机制"></a>执行机制</h2><p><img src="/image/post1/post1_1.png" alt="image"></p>
-<p>从上往下执行，首先定义test1函数，如上图。test1、c、test3属于全局变量，保存到GO中。</p>
-<p>此时test1的作用域链保存了GO。</p>
-<p><img src="/image/post1/post1_2.png" alt="image"></p>
-<p>接下来，test1执行。</p>
-<p>因为test1内部有变量声明，此时产生test1的AO，即test1自己的函数上下文，存到test1的作用域链中，且执行顺序在GO前（以栈的方式）。</p>
-<p>变量a、test2存到test1的AO中。</p>
-<p><img src="/image/post1/post1_3.png" alt="image"></p>
-<p>当test1执行时，test2也被定义，此时产生test2的AO，test2的作用域链中存入它的上级环境即test1的AO。</p>
-<p><strong>此时test1和test2的作用域链都存着test1的AO。</strong></p>
-<p>当test1执行完时，test1作用域链中的AO已经结束，但是 <strong>test2中的作用域链仍指向est1的AO</strong> ，此时即形成了 <strong>闭包</strong>，test2仍可以访问test1中的变量。</p>
-<p>至此，我们可以清晰的看到闭包是如何形成的。</p>
-<p>最终，test3()实际上执行的test2()，因为test1()执行完已经结束，返回了test2。<br>当test2执行时，生成了自己的AO，保存了变量b。</p>
-<p>当执行console.log(a)时，首先在当前的执行上下文，也就是test2的AO中查找，如果没有，继续往上一层环境找，我们在test1的AO中找到了变量a，因此最终打印结果为1，且test2的AO被销毁。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过上述的示例我们可以清晰的了解闭包的概念，以及函数作用域链的执行方式。</p>
+        <p>本文主要描述了如何最快的通过 Hexo 和 Github 搭建博客，以及在搭建过程中遇到的问题。<br>在配置博客之前，需自行安装 Git，Node.js 环境以及 Github 账号，这里暂不描述。</p>
+<ul>
+<li>Github Pages</li>
+<li>Hexo 博客框架</li>
+<li>主题选择</li>
+<li>部署 Github</li>
+</ul>
+<h2 id="Github-Pages"><a href="#Github-Pages" class="headerlink" title="Github Pages"></a>Github Pages</h2><p>Github Pages 本身是 Github 提供的博客服务。</p>
+<p><strong>具体操作如下</strong></p>
+<ol>
+<li>首先创建一个 Github 仓库，该仓库即用于自己的博客仓库。</li>
+</ol>
+<p><img src="/image/post2/post2_1.png" alt="image"></p>
+<ol start="2">
+<li>仓库名设置为 xxx.github.io，并勾选上 README.md。</li>
+</ol>
+<p><img src="/image/post2/post2_2.png" alt="image"></p>
+<p><strong>注意：xxx 是 Github 的用户名（非昵称），且注意大小写，默认都是小写，否则访问的域名将不是 xxx.github.io ，而是 xxx.github.io/yyy.github.io 的子级页面。</strong></p>
+<ol start="3">
+<li>README.md 是说明文档，对该项目的简要描述。</li>
+<li>访问 xxx.github.io ，当前默认打开应该为 README.md 的内容。</li>
+</ol>
+<h2 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h2><p>Hexo 是我们当前选择的一个博客框架，在安装 Hexo 前，需安装 Node.js 和 Git 环境，全部安装完毕后，具体操作如下。</p>
+<p>全局安装 Hexo</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><code class="hljs awk">npm install -g hexo-cli<br><span class="hljs-regexp">//</span>安装完毕后<br>hexo -v<br><span class="hljs-regexp">//</span>查看到版本号即安装成功<br></code></pre></td></tr></table></figure>
+
+
+<p>2.创建一个本地博客空文件夹。</p>
+<p>3.右键该文件夹，选择 Git Bash Here 打开命令行。</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>将该文件夹初始化为hexo博客文件夹<br>hexo init<br><span class="hljs-regexp">//</span>安装依赖包<br>npm install<br><span class="hljs-regexp">//</span>生成网页，默认自带一个主题的博客<br>hexo g<br><span class="hljs-regexp">//</span>启动本地服务<br>hexo s<br></code></pre></td></tr></table></figure>
+
+
+<p>在浏览器输入 <a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000/</a> 即可查看本地博客项目。</p>
+<p>4.如何写一篇博客。</p>
+<p>在 /source/_posts/ 文件夹下新建 xx.md 文件，里面即为博客内容。通过 hexo g 重新生成网页，hexo s 重新启动服务，即可看到多了一篇博客。</p>
+<h2 id="主题选择"><a href="#主题选择" class="headerlink" title="主题选择"></a>主题选择</h2><p>这里我们选择Next主题，Next支持丰富的主题样式，具体操作如下。</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://hexo.io/themes/">https://hexo.io/themes/</a>  选择自己喜欢的主题，下载该主题的压缩包。</li>
+<li>到 /themes/ 目录下，将解压后的文件夹放到该目录下，并将该主题的文件夹名修改为 next。</li>
+<li>修改配置文件。</li>
+</ol>
+<ul>
+<li>打开 _config.yml 文件</li>
+<li>找到 theme: </li>
+<li>将默认的 landscape 修改为 next ，注意：冒号和后面的内容需要有空格，否则会编译失败，即 theme: next，冒号和next之间有一个空格，所有的配置项都如此。</li>
+<li>找到 # Site，添加博客名称，作者名字等。</li>
+<li>找到 # URL, 填入 url。比如 url: <a href="https://liux4ever.github.io/">https://liux4ever.github.io</a></li>
+<li>其它配置信息根据需求自行修改。</li>
+</ul>
+<h2 id="部署Github"><a href="#部署Github" class="headerlink" title="部署Github"></a>部署Github</h2><p>上述部分，我们已经搭建了本地博客，已经可以在本地查看，如何在线上进行查看，将我们的项目部署到 Github 上即可。</p>
+<ol>
+<li>修改配置文件，找到 deploy:  修改为以下内容</li>
+</ol>
+<figure class="highlight properties"><table><tr><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">deploy</span>:<span class="hljs-string"></span><br>  <span class="hljs-attr">type</span>: <span class="hljs-string">git</span><br>  <span class="hljs-attr">repo</span>: <span class="hljs-string">&#x27;git@github.com:xxx/repoName&#x27;</span><br>  <span class="hljs-attr">branch</span>: <span class="hljs-string">main</span><br></code></pre></td></tr></table></figure>
+
+
+<p><strong>注意：repo 的值有部分教程填的直接是仓库地址，实测是不行的，需按上述方式，xxx是Github用户名，repoName是博客的仓库名。brach 填的是 main，是由于 Github 已经将默认 master 改为了 main ，因此填 master 也是没用的。</strong></p>
+<ol start="2">
+<li>回到 Git Bash，安装</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="code"><pre><code class="hljs awk">npm install hexo-deployer-git --save  <span class="hljs-regexp">//</span>只需安装一次<br>hexo d -g<br></code></pre></td></tr></table></figure>
+
+
+<p>得到 INFO Deploy done: git 即为部署成功。若失败，需要配置git本地环境。<br> 3. 配置失败情况，需配置 Git SSH</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>配置用户名和邮箱<br>git config --global user.name <span class="hljs-string">&quot;账号名&quot;</span><br>git config --global user.email <span class="hljs-string">&quot;邮箱号&quot;</span><br><span class="hljs-regexp">//</span>查看配置信息<br>git config --global --list<br><span class="hljs-regexp">//</span>生成SSH<br>ssh-keygen -t rsa<br><span class="hljs-regexp">//</span>将上述生成的keys复制到下图中 Github 的SSH keys中，添加 New SSH key。<br><span class="hljs-regexp">//</span>测试是否配置成功<br>ssh -T git@github.com<br><span class="hljs-regexp">//</span>生成并上传到github<br>hexo d -g<br></code></pre></td></tr></table></figure>
+
+<p><img src="/image/post2/post2_3.png" alt="image"></p>
+<p>每次修改博客配置或新增修改文件时，直接执行 hexo d -g  ，即自动部署到 Github 上。<br><br/><br>最后，每次重新部署会替换 README.md 文件，如果不想每次重新生成该文件，需要在配置文件里，找到 skip_render 这一项，并改为 skip_render: README.md，并且将 README.md 文件放到 public 文件夹下即可。</p>
 
     </div>
 </div>
@@ -310,19 +347,12 @@
 </script>
 <div class="Last-Next">
     
-    <a href="/2021/06/01/20210601_blog/">
-        <div class="last">
-            <span>上一篇</span>
-            <p>Hexo + Github Pages 搭建个人博客</p>
-        </div>
-    </a>
-    
 
     
-    <a href="/2021/05/15/test/">
+    <a href="/2021/05/19/20210519_closure/">
         <div class="next">
             <span>下一篇</span>
-            <p>test文章</p>
+            <p>深入理解JS闭包及作用域链</p>
         </div>
     </a>
     
