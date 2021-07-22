@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		
+<title>PromiseA+规范 - 手写promise</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/logo.png">
+
+
+<meta name="keywords" content="Promise,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+	<meta name="generator" content="Hexo 5.4.0"></head>
+
+	<body>
+		
+<link rel="stylesheet" href="/css/page.css">
+
+
+<link rel="stylesheet" href="/css/page_cente.css">
+
+
+<link rel="stylesheet" href="/css/atom-one-dark.css">
+
+
+<link rel="stylesheet" href="/css/header.css">
+
+	<div class="header">
+		<div class="header-top">
+			<div class="h-left">
+				<a href="/">
+					<img src="/image/logo.png" alt="Quiet">
+				</a>
+			</div>
+			<div class="h-right">
+				<ul>
+					
+						
+								<li>
+									<a href="/">
+										主页
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/archives">
+										文章
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/categories">
+										分类
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/tags">
+										标签
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+						
+								<li>
+									<a href="/about">
+										关于
+									</a>
+									<span class="dot"></span>
+								</li>
+								
+									
+				</ul>
+			</div>
+			<div class="h-right-close">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+					<path fill="none" d="M0 0h24v24H0z" />
+					<path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" fill="rgba(68,68,68,1)" />
+				</svg>
+			</div>
+		</div>
+	</div>
+	<div class="sidebar">
+    <div class="topo">
+        <h2>Lau</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">主页</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分类</a>
+        </li>
+        
+        <li>
+            <a href="/tags">标签</a>
+        </li>
+        
+        <li>
+            <a href="/about">关于</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/liux4ever">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" >
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'
+    style='cursor: pointer;display: none; position: fixed;left: 0;top: 0; right: 0;bottom: 0;background-color: #333;opacity:0.5;z-index: 108;'>
+</div>
+<style>
+    .sidebar {
+        width: 0;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        z-index: 999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815)
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $(function () { $('.h-right-close>svg').click(function () { $('.sidebar').animate({ width: "66%" }, 500); $('.shelter').fadeIn("slow") }); $('.shelter').click(function (e) { $('.sidebar').animate({ width: "0" }, 500); $('.shelter').fadeOut("slow") }) })
+</script>
+		<script>
+			$(function () { $(window).scroll(function () { if ($(document).scrollTop() > 100) { $(".header-top").removeClass("header-move2"); $('.header-top').addClass('header-move1') } else { $(".header-top").removeClass("header-move1"); $('.header-top').addClass('header-move2') } }) });
+		</script>
+<div class="header-bg bg-content-img">
+    <div class="bg-content">
+        <ul class="tag">
+            
+            
+            <li><a href="/tags/Promise">Promise</a></li>
+            
+            
+        </ul>
+        <h1>PromiseA+规范 - 手写promise</h1>
+        <div class="article-info">
+            <div class="article-author">
+                
+                <svg t="1604839279282" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" p-id="2901" width="20" height="20">
+                    <path
+                        d="M513 956.3c-247.7 0-448-200.3-448-448S265.3 66.2 513 66.2s448 200.3 448 448-200.3 442.1-448 442.1z m0-830.9c-212.2 0-388.8 170.7-388.8 388.8C124.2 726.3 294.9 903 513 903c212.2 0 388.8-170.7 388.8-388.8S725.2 125.4 513 125.4z m0 430.2c-94.2 0-170.7-76.5-170.7-170.7S418.8 207.8 513 207.8s170.7 76.5 170.7 170.7S607.2 555.6 513 555.6z m0-289.1c-64.6 0-112 52.8-112 112s47.4 117.9 112 117.9 112-52.8 112-112-47.4-117.9-112-117.9z m0 689.8c-135.7 0-259-58.7-341.9-158.9l-11.8-17.8 11.8-17.8c76.5-117.9 206.2-188.5 347.8-188.5 135.7 0 265 64.6 341.9 182.6l11.8 17.8-11.8 17.8C778 897.1 648.7 956.3 513 956.3zM230.3 773.2C300.9 849.7 406.9 897 513 897c112 0 218.1-47.4 288.6-129.8-70.5-88.2-170.7-135.6-282.7-135.6s-218.1 53.3-288.6 141.6z"
+                        p-id="2902" fill="#ffffff"></path>
+                </svg>
+                
+                <span> <a href="">Lau</a></span>
+                <p>2021-07-22 22:33:00</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="article-content">
+    <div id="article" class="content">
+        <h2 id="课程目标"><a href="#课程目标" class="headerlink" title="课程目标"></a>课程目标</h2><ul>
+<li>了解PromiseA+规范</li>
+<li>实现一个简单的Promise<h2 id="知识要点"><a href="#知识要点" class="headerlink" title="知识要点"></a>知识要点</h2></li>
+<li>Promise的三种状态</li>
+<li>Promise的then方法</li>
+<li>resolvePromise</li>
+<li>onFulfilled和onRejected<h2 id="补充知识点"><a href="#补充知识点" class="headerlink" title="补充知识点"></a>补充知识点</h2><h3 id="PromiseA"><a href="#PromiseA" class="headerlink" title="PromiseA+"></a><em>PromiseA+</em></h3></li>
+</ul>
+<ol>
+<li>promise 是一个有 then 方法的对象或函数</li>
+<li>thenable 是一个有 then 方法的对象或函数</li>
+<li>value 是 promise 状态成功时的值，也就是 resolve 的参数，包括各种数据类型，也包括undefined/thenable或者是 promise</li>
+<li>reason 是 promise 状态失败时的值, 也就是 reject 的参数，表示拒绝的原因</li>
+<li>exception 是一个使用throw抛出的异常值<h3 id="规范"><a href="#规范" class="headerlink" title="规范"></a><em>规范</em></h3><h4 id="三种状态"><a href="#三种状态" class="headerlink" title="三种状态"></a>三种状态</h4></li>
+</ol>
+<p>promise有三种状态，pending、fulfilled、rejected。 其中 pending 为初始状态，fulfilled和rejected为最终态</p>
+<p>一个 promise 被 resolve 之后变成 fulfilled 状态，必须拥有一个 value 值<br>一个 promise 被 rejected 之后变成 rejected 状态，必须拥有一个 reason 值</p>
+<p>即 pending -&gt; resolve(value) -&gt; fulfilled</p>
+<p>   pending -&gt; reject(reason) -&gt; rejected</p>
+<h4 id="then"><a href="#then" class="headerlink" title="then"></a>then</h4><figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-built_in">Promise</span>.then(onFulfilled, onRejected)<br></code></pre></td></tr></table></figure>
+<p>promise 提供一个 then 方法用来访问最终结果，无论是 value 还是 reason</p>
+<ol>
+<li><p>参数要求</p>
+<p> 1.1 onFullfilled 和 onRejected 必须是函数，否则被忽略。</p>
+</li>
+<li><p>onFulfilled 特性</p>
+<p> 2.1 在 promise 变成 fulfilled 时，调用 onFulfilled，参数是 value</p>
+<p> 2.2 在 promise 变成 fulfilled 之前，不应该调用</p>
+<p> 2.3 只能调用一次</p>
+</li>
+<li><p>onRejected 特性</p>
+<p> 3.1 在 promise 变成 rejected 时，调用 onRejected，参数是 reason</p>
+<p> 3.2 在 promise 变成 rejected 之前，不应该调用</p>
+<p> 3.3 只能调用一次</p>
+</li>
+<li><p>onFulfilled 和 onRejected 应该为微任务，用 queueMicrotask 实现。</p>
+</li>
+<li><p>then 方法可以被调用多次</p>
+<p> 5.1 promise状态变成 fulfilled 后，所有的 onFulfilled 回调都需要按照then的顺序执行, 也就是按照注册顺序执行</p>
+<p> 5.2 promise状态变成 rejected 后，所有的 onRejected 回调都需要按照then的顺序执行, 也就是按照注册顺序执行</p>
+</li>
+<li><p>返回值</p>
+ <figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js">promise2 = promise1.then(onFulfilled, onRejected)<br></code></pre></td></tr></table></figure>
+<p> 6.1 onFulfilled 或 onRejected 执行的结果为x，调用 resolvePromise</p>
+<p> 6.2 如果 onFulfilled 或者 onRejected 执行时抛出异常，promise2需要被reject</p>
+<p> 6.3 如果 onFulfilled 不是一个函数，promise2 以 promise1 的 value 触发fulfilled</p>
+<p> 6.4 如果 onRejected 不是一个函数，promise2 以 promise1 的reason 触发rejected</p>
+</li>
+<li><p>resolvePromise</p>
+   <figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js">resolvePromise(promise2, x, resolve, reject)<br></code></pre></td></tr></table></figure>
+
+<p> 7.1 如果 promise2 和 x 相等，那么 reject TypeError</p>
+<p> 7.2 如果 x 是一个 promsie</p>
+<p>   x 是 pending 态，那么 promise 必须要在 pending，直到 x 变成 fulfilled or rejected.</p>
+<p>   x 被 fulfilled, fulfill promise with the same value.</p>
+<p>   x 被 rejected, reject promise with the same reason.</p>
+<p> 7.3 如果 x 是一个 object 或者是一个 function</p>
+   <figure class="highlight nix"><table><tr><td class="code"><pre><code class="hljs nix"><span class="hljs-keyword">let</span> <span class="hljs-attr">then</span> = x.<span class="hljs-keyword">then</span><br></code></pre></td></tr></table></figure>
+<p>   x.then 这步出错，那么 reject promise with e as the reason</p>
+<p>   then 是一个函数，then.call(x, resolvePromiseFn, rejectPromise)</p>
+<p>   resolvePromiseFn 的 入参是 y，执行 resolvePromise(promise2, y, resolve, reject);</p>
+<p>   rejectPromise 的 入参是 r，reject promise with r</p>
+<p>   如果 resolvePromise 和 rejectPromise 都调用了，那么第一个调用优先，后面的调用忽略。</p>
+<p>   如果调用then抛出异常，resolvePromise 或 rejectPromise 已经被调用，那么忽略。否则 reject promise with e as the reason</p>
+<p>   如果 then 不是一个 function，fulfill promise with x</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2> <figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 定义promise类及初始状态</span><br><span class="hljs-keyword">const</span> PENDING = <span class="hljs-string">&quot;pending&quot;</span>;<br><span class="hljs-keyword">const</span> FULLFILLED = <span class="hljs-string">&quot;fullfilled&quot;</span>;<br><span class="hljs-keyword">const</span> REJECTED = <span class="hljs-string">&quot;rejected&quot;</span>;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyPromise</span> </span>&#123;<br>  <span class="hljs-comment">// 保存pending状态成功或失败的回调</span><br>  FULLFILLED_CALLBACK_LIST = [];<br>  REJECTED_CALLBACK_LIST = [];<br>  _status = PENDING;<br>  <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">fn</span>)</span> &#123;<br>    <span class="hljs-built_in">this</span>.status = PENDING;<br>    <span class="hljs-built_in">this</span>.value = <span class="hljs-literal">null</span>;<br>    <span class="hljs-built_in">this</span>.reason = <span class="hljs-literal">null</span>;<br>    <span class="hljs-keyword">try</span> &#123;<br>      fn(<span class="hljs-built_in">this</span>.resolve.bind(<span class="hljs-built_in">this</span>), <span class="hljs-built_in">this</span>.reject.bind(<span class="hljs-built_in">this</span>));<br>    &#125; <span class="hljs-keyword">catch</span> (e) &#123;<br>      <span class="hljs-built_in">this</span>.reject(e);<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-title">resolve</span>(<span class="hljs-params">value</span>)</span> &#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.status == PENDING) &#123;<br>      <span class="hljs-built_in">this</span>.value = value;<br>      <span class="hljs-built_in">this</span>.status = FULLFILLED;<br>    &#125;<br>  &#125;<br>  <span class="hljs-function"><span class="hljs-title">reject</span>(<span class="hljs-params">reason</span>)</span> &#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.status == PENDING) &#123;<br>      <span class="hljs-built_in">this</span>.reason = reason;<br>      <span class="hljs-built_in">this</span>.status = REJECTED;<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-keyword">get</span> <span class="hljs-title">status</span>() &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>._status;<br>  &#125;<br>  <span class="hljs-keyword">set</span> <span class="hljs-title">status</span>(<span class="hljs-params">newStatus</span>) &#123;<br>    <span class="hljs-built_in">this</span>._status = newStatus;<br>    <span class="hljs-keyword">switch</span> (newStatus) &#123;<br>      <span class="hljs-keyword">case</span> FULLFILLED:<br>        &#123;<br>          <span class="hljs-built_in">this</span>.FULLFILLED_CALLBACK_LIST.forEach(<span class="hljs-function">(<span class="hljs-params">callback</span>) =&gt;</span> &#123;<br>            callback(<span class="hljs-built_in">this</span>.value);<br>          &#125;);<br>        &#125;<br>        <span class="hljs-keyword">break</span>;<br>      <span class="hljs-keyword">case</span> REJECTED:<br>        &#123;<br>          <span class="hljs-built_in">this</span>.REJECTED_CALLBACK_LIST.forEach(<span class="hljs-function">(<span class="hljs-params">callback</span>) =&gt;</span> &#123;<br>            callback(<span class="hljs-built_in">this</span>.reason);<br>          &#125;);<br>        &#125;<br>        <span class="hljs-keyword">break</span>;<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-comment">//  then接收两个参数, onFulfilled 和 onRejected</span><br>  <span class="hljs-function"><span class="hljs-title">then</span>(<span class="hljs-params">onFulfilled, onRejected</span>)</span> &#123;<br>    <span class="hljs-comment">// 如果接收的不是function就忽略，忽略指的是原样返回 value 或者 reason.</span><br>    <span class="hljs-keyword">const</span> realOnFulfilled = <span class="hljs-built_in">this</span>.isFunction(onFulfilled)<br>      ? onFulfilled<br>      : <span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> &#123;<br>          <span class="hljs-keyword">return</span> value;<br>        &#125;;<br>    <span class="hljs-keyword">const</span> realOnRejected = <span class="hljs-built_in">this</span>.isFunction(onRejected)<br>      ? onRejected<br>      : <span class="hljs-function">(<span class="hljs-params">reason</span>) =&gt;</span> &#123;<br>          <span class="hljs-keyword">throw</span> reason;<br>        &#125;;<br><br>    <span class="hljs-comment">// then 整体返回一个promise</span><br>    <span class="hljs-comment">// 如果 onFulfilled 或者 onRejected 抛出一个异常 e ，则 promise2 必须拒绝执行，并返回拒因 e</span><br>    <span class="hljs-comment">// 如果 onFulfilled 或者 onRejected 返回一个值 x ，则运行 resolvePromise 方法</span><br>    <span class="hljs-keyword">const</span> promise2 = <span class="hljs-keyword">new</span> MyPromise(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> &#123;<br>      <span class="hljs-keyword">const</span> fulfilledMicrotask = <span class="hljs-function">() =&gt;</span> &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>          <span class="hljs-keyword">const</span> x = realOnFulfilled(<span class="hljs-built_in">this</span>.value);<br>          <span class="hljs-built_in">this</span>.resolvePromise(promise2, x, resolve, reject);<br>        &#125; <span class="hljs-keyword">catch</span> (e) &#123;<br>          reject(e);<br>        &#125;<br>      &#125;;<br>      <span class="hljs-keyword">const</span> rejectedMicrotask = <span class="hljs-function">() =&gt;</span> &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>          <span class="hljs-keyword">const</span> x = realOnRejected(<span class="hljs-built_in">this</span>.reason);<br>          <span class="hljs-built_in">this</span>.resolvePromise(promise2, x, resolve, reject);<br>        &#125; <span class="hljs-keyword">catch</span> (e) &#123;<br>          reject(e);<br>        &#125;<br>      &#125;;<br>      <span class="hljs-keyword">switch</span> (<span class="hljs-built_in">this</span>.status) &#123;<br>        <span class="hljs-keyword">case</span> FULLFILLED:<br>          fulfilledMicrotask();<br>          <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> REJECTED:<br>          rejectedMicrotask();<br>          <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> PENDING:<br>          <span class="hljs-comment">// pending状态暂时存入数组中，等待状态改变再回调</span><br>          <span class="hljs-built_in">this</span>.FULLFILLED_CALLBACK_LIST.push(fulfilledMicrotask);<br>          <span class="hljs-built_in">this</span>.REJECTED_CALLBACK_LIST.push(rejectedMicrotask);<br>          <span class="hljs-keyword">break</span>;<br>      &#125;<br>    &#125;);<br>    <span class="hljs-keyword">return</span> promise2;<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-title">resolvePromise</span>(<span class="hljs-params">promise2, x, resolve, reject</span>)</span> &#123;<br>    <span class="hljs-comment">// 如果 promise2 和 x 指向同一对象，以 TypeError 为据因拒绝执行 newPromise</span><br>    <span class="hljs-keyword">if</span> (promise2 === x) &#123;<br>      <span class="hljs-keyword">return</span> reject(<br>        <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">&quot;The promise and the return value are the same&quot;</span>)<br>      );<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (x <span class="hljs-keyword">instanceof</span> MyPromise) &#123;<br>      <span class="hljs-comment">// 如果x是promise，继续执行x，如果执行的时候得到一个y，继续解析y</span><br>      queueMicrotask(<span class="hljs-function">() =&gt;</span> &#123;<br>        x.then(<span class="hljs-function">(<span class="hljs-params">y</span>) =&gt;</span> &#123;<br>          <span class="hljs-built_in">this</span>.resolvePromise(promise2, y, resolve, reject);<br>        &#125;, reject);<br>      &#125;);<br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> x == <span class="hljs-string">&quot;object&quot;</span> || <span class="hljs-built_in">this</span>.isFunction(x)) &#123;<br>      <span class="hljs-comment">// 如果x是对象或函数</span><br>      <span class="hljs-keyword">if</span> (x === <span class="hljs-literal">null</span>) &#123;<br>        <span class="hljs-keyword">return</span> resolve(x);<br>      &#125;<br>      <span class="hljs-keyword">let</span> then = <span class="hljs-literal">null</span>;<br>      <span class="hljs-keyword">try</span> &#123;<br>        then = x.then;<br>      &#125; <span class="hljs-keyword">catch</span> (e) &#123;<br>        <span class="hljs-keyword">return</span> reject(e);<br>      &#125;<br><br>      <span class="hljs-comment">// 如果then是函数</span><br>      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.isFunction(then)) &#123;<br>        <span class="hljs-keyword">let</span> called = <span class="hljs-literal">false</span>;<br>        <span class="hljs-keyword">try</span> &#123;<br>          then.call(<br>            x,<br>            <span class="hljs-function">(<span class="hljs-params">y</span>) =&gt;</span> &#123;<br>              <span class="hljs-keyword">if</span> (called) <span class="hljs-keyword">return</span>;<br>              called = <span class="hljs-literal">true</span>;<br>              <span class="hljs-built_in">this</span>.resolvePromise(promise2, y, resolve, reject);<br>            &#125;,<br>            <span class="hljs-function">(<span class="hljs-params">r</span>) =&gt;</span> &#123;<br>              <span class="hljs-keyword">if</span> (called) <span class="hljs-keyword">return</span>;<br>              called = <span class="hljs-literal">true</span>;<br>              reject(r);<br>            &#125;<br>          );<br>        &#125; <span class="hljs-keyword">catch</span> (e) &#123;<br>          <span class="hljs-keyword">if</span> (called) <span class="hljs-keyword">return</span>;<br>          reject(e);<br>        &#125;<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        resolve(x);<br>      &#125;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      resolve(x);<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-comment">// 判断是否是一个函数</span><br>  <span class="hljs-function"><span class="hljs-title">isFunction</span>(<span class="hljs-params">param</span>)</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> param === <span class="hljs-string">&quot;function&quot;</span>;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+
+    </div>
+</div>
+<style>
+    #noneimg img {
+        display: none;
+        z-index: 109;
+        width: 600px !important;
+        border-radius: 0px;
+        position: fixed;
+        box-shadow: 0 0 0px #c3c3c300 !important;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto !important;
+    }
+
+    @media screen and (max-width:600px) {
+        #noneimg img {
+            width: 88%
+        }
+    }
+</style>
+<script>
+    $(function () { $('#article').click(function (e) { if (e.target.tagName == "IMG") { if ($('#nonediv').length == 0) { let MImg = `<div id='noneimg'><img src='${e.target.currentSrc}'></div>`; let MDiv = "<div id='nonediv' style='cursor: pointer;display: none; position: fixed;left: 0;top: 0; right: 0;bottom: 0;background-color: #333;opacity:0.5;z-index: 108;'></div>"; $('#article').append(MDiv); $('#article').append(MImg); $("#nonediv").fadeIn("slow"); $("#noneimg img").fadeIn("slow") } } else { if ($('#nonediv').length !== 0) { $("#noneimg ").fadeOut("slow"); $("#nonediv").fadeOut("slow"); setTimeout(function () { $('#nonediv').remove(); $('#noneimg').remove() }, 500) } } }); $('.article-content').addClass('content-move') });
+</script>
+<div class="Last-Next">
+    
+
+    
+    <a href="/2021/07/05/20210705_designMode/">
+        <div class="next">
+            <span>下一篇</span>
+            <p>前端几种常见设计模式</p>
+        </div>
+    </a>
+    
+</div>
+		
+<link rel="stylesheet" href="/css/food.css">
+
+<div class="footer">
+	<div class="Copyright">
+		©2021 By Lau. 
+	</div>
+	<div class="contact">
+		
+		<a target="_blank" rel="noopener" href="https://github.com/liux4ever">
+			<img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png">
+		</a>
+		
+	</div>
+</div>
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: block;
+            border-radius: 50%;
+            width: 66px;
+            height: 66px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            transition: border .5s;
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 30px;
+            height: 30px;
+            margin-top: 17.5px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $('#js-go_top').gotoTop({ offset: 500, speed: 300, animationShow: { 'transform': 'translate(0,0)', 'transition': 'transform .5s ease-in-out' }, animationHide: { 'transform': 'translate(100px,0)', 'transition': 'transform .5s ease-in-out' } });
+</script>
+<script>
+</script>
+	</body>
+
+</html>
