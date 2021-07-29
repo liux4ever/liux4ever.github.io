@@ -259,16 +259,16 @@
 <li>Promise的三种状态</li>
 <li>Promise的then方法</li>
 <li>resolvePromise</li>
-<li>onFulfilled和onRejected<h2 id="补充知识点"><a href="#补充知识点" class="headerlink" title="补充知识点"></a>补充知识点</h2><h3 id="PromiseA-规范"><a href="#PromiseA-规范" class="headerlink" title="PromiseA+规范"></a><em>PromiseA+规范</em></h3></li>
+<li>onFulfilled和onRejected</li>
 </ul>
-<ol>
+<h2 id="补充知识点"><a href="#补充知识点" class="headerlink" title="补充知识点"></a>补充知识点</h2><h3 id="PromiseA-规范"><a href="#PromiseA-规范" class="headerlink" title="PromiseA+规范"></a><em>PromiseA+规范</em></h3><ol>
 <li>promise 是一个有 then 方法的对象或函数</li>
 <li>thenable 是一个有 then 方法的对象或函数</li>
 <li>value 是 promise 状态成功时的值，也就是 resolve 的参数，包括各种数据类型，也包括undefined/thenable或者是 promise</li>
 <li>reason 是 promise 状态失败时的值, 也就是 reject 的参数，表示拒绝的原因</li>
-<li>exception 是一个使用throw抛出的异常值<h3 id="三种状态"><a href="#三种状态" class="headerlink" title="三种状态"></a>三种状态</h3></li>
+<li>exception 是一个使用throw抛出的异常值</li>
 </ol>
-<p>promise有三种状态，pending、fulfilled、rejected。 其中 pending 为初始状态，fulfilled和rejected为最终态</p>
+<h3 id="三种状态"><a href="#三种状态" class="headerlink" title="三种状态"></a>三种状态</h3><p>promise有三种状态，pending、fulfilled、rejected。 其中 pending 为初始状态，fulfilled和rejected为最终态</p>
 <p>一个 promise 被 resolve 之后变成 fulfilled 状态，必须拥有一个 value 值<br>一个 promise 被 rejected 之后变成 rejected 状态，必须拥有一个 reason 值</p>
 <p>即 pending -&gt; resolve(value) -&gt; fulfilled</p>
 <p>   pending -&gt; reject(reason) -&gt; rejected</p>

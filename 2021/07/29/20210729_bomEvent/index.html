@@ -3,7 +3,7 @@
 
 	<head>
 		
-<title>浏览器请求 - ajax和fetch</title>
+<title>浏览器事件 - 实现一个兼容多浏览器的绑定事件</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -231,7 +231,7 @@
         <ul class="tag">
             
         </ul>
-        <h1>浏览器请求 - ajax和fetch</h1>
+        <h1>浏览器事件 - 实现一个兼容多浏览器的绑定事件</h1>
         <div class="article-info">
             <div class="article-author">
                 
@@ -243,23 +243,34 @@
                 </svg>
                 
                 <span> <a href="">Lau</a></span>
-                <p>2021-07-26 22:54:12</p>
+                <p>2021-07-29 23:17:09</p>
             </div>
         </div>
     </div>
 </div>
 <div class="article-content">
     <div id="article" class="content">
-        <h2 id="ajax-和-fetch-API-异同"><a href="#ajax-和-fetch-API-异同" class="headerlink" title="ajax 和 fetch API 异同"></a>ajax 和 fetch API 异同</h2><h3 id="ajax"><a href="#ajax" class="headerlink" title="ajax"></a>ajax</h3><p>通过XMLHttpRequest实现</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">let</span> xhr = <span class="hljs-keyword">new</span> XMLHttpRequest();<br>xhr.open(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;https://api.com&#x27;</span>);<br>xhr.onreadystatechange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;<br>    <span class="hljs-keyword">if</span>(xhr.readyState !== <span class="hljs-number">4</span>) <span class="hljs-keyword">return</span>;<br>    <br>    <span class="hljs-keyword">if</span>(xhr.status === <span class="hljs-number">200</span>) &#123;<br>        <span class="hljs-built_in">console</span>.log(xhr.responseText);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;error&#x27;</span>, xhr.status);<br>    &#125;<br>&#125;<br><span class="hljs-comment">// 设置请求超时时间</span><br>xhr.timeout = <span class="hljs-number">3000</span>;<br>xhr.ontimeout = <span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;timeout&#x27;</span>);<br>&#125;<br><span class="hljs-comment">// progress事件报告文件上传进度</span><br>xhr.upload.onprogress = <span class="hljs-function"><span class="hljs-params">p</span> =&gt;</span> &#123;<br>    <span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">Math</span>.round((p.loaded / p.total) * <span class="hljs-number">100</span>) + <span class="hljs-string">&#x27;%&#x27;</span>)<br>&#125;<br><span class="hljs-comment">// 发送请求</span><br>xhr.send()<br></code></pre></td></tr></table></figure>
-
-<h3 id="fetch"><a href="#fetch" class="headerlink" title="fetch"></a>fetch</h3><ol>
-<li>默认不带cookie</li>
-<li>错误不会reject</li>
-<li>不支持超时设置</li>
-<li>需要借用AbortController中止fetch<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js">fetch(<span class="hljs-string">&#x27;https://api.com&#x27;</span>, &#123;<br>    <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;GET&#x27;</span>,<br>    <span class="hljs-attr">credentials</span>: <span class="hljs-string">&#x27;same-origin&#x27;</span><br>&#125;)<br>.then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> &#123;<br>    <span class="hljs-comment">// 错误不会reject，所以判断是否请求成功</span><br>    <span class="hljs-keyword">if</span>(response.ok) &#123;<br>        <span class="hljs-keyword">return</span> response.json();<br>    &#125;<br>    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&#x27;Network error&#x27;</span>);<br>&#125;<br>.then(<span class="hljs-function"><span class="hljs-params">json</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(json))<br>.catch(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(error))<br><br><br><span class="hljs-comment">// 通过promise设置超时</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchTimeout</span>(<span class="hljs-params">url, init, timeout=<span class="hljs-number">3000</span></span>) </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve,reject</span>)=&gt;</span>&#123;<br>        fetch(url, init)<br>        .then(resolve)<br>        .catch(reject);<br>        <span class="hljs-built_in">setTimeout</span>(reject, timeout)<br>    &#125;)<br>&#125;<br><br><span class="hljs-comment">// 中止fetch</span><br><span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> AbortController();<br>fetch(url, options)<br>.then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())<br>.then(<span class="hljs-function"><span class="hljs-params">json</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(json))<br>.catch(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-built_in">console</span>.error(<span class="hljs-string">&#x27;Error:&#x27;</span>, error));<br><br>controller.abort();<br></code></pre></td></tr></table></figure></li>
+        <h2 id="知识要点"><a href="#知识要点" class="headerlink" title="知识要点"></a>知识要点</h2><ul>
+<li>addEventListener 和 attachEvent 区别</li>
+<li>封装一个兼容多浏览器的通用绑定事件</li>
+</ul>
+<h2 id="补充知识点"><a href="#补充知识点" class="headerlink" title="补充知识点"></a>补充知识点</h2><ul>
+<li>通常我们通过 addEventListener 和 removeEventListener 绑定和删除事件   他们接收三个参数：</li>
+</ul>
+<ol>
+<li>事件类型</li>
+<li>事件处理方法</li>
+<li>布尔参数，默认为 false（true 代表事件捕获阶段调用，false代表事件冒泡阶段调用）</li>
 </ol>
-
+<ul>
+<li>但是在IE7，IE8中不支持 addEventListener 和 removeEventListener，我们可以通过 attachEvent 和 detachEvent 来实现  他们分别接受两个参数</li>
+</ul>
+<ol>
+<li>事件类型</li>
+<li>事件处理方法</li>
+</ol>
+<p> <strong>注意</strong>：IE不支持事件捕获</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2> <figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BomEvent</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">element</span>)</span> &#123;<br>        <span class="hljs-built_in">this</span>.element = element;<br>    &#125;<br>    <span class="hljs-comment">// 绑定事件</span><br>    <span class="hljs-function"><span class="hljs-title">addEvent</span>(<span class="hljs-params">type, handler</span>)</span> &#123;<br>        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">this</span>.element.addEventListener) &#123;<br>            <span class="hljs-built_in">this</span>.element.addEventListener(type, handler, <span class="hljs-literal">false</span>);<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(<span class="hljs-built_in">this</span>.element.attachEvent) &#123;<br>            <span class="hljs-comment">// 注意需加上on</span><br>            <span class="hljs-built_in">this</span>.element.attachEvent(<span class="hljs-string">&#x27;on&#x27;</span> + type, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;<br>                handler.call(<span class="hljs-built_in">this</span>.element);<br>            &#125;)<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-built_in">this</span>.element[<span class="hljs-string">&#x27;on&#x27;</span> + type] = handler<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">// 移除事件</span><br>    <span class="hljs-function"><span class="hljs-title">removeEvent</span>(<span class="hljs-params">type, handler</span>)</span> &#123;<br>        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">this</span>.element.removeEnentListener) &#123;<br>            <span class="hljs-built_in">this</span>.element.removeEnentListener(type, handler, <span class="hljs-literal">false</span>);<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(<span class="hljs-built_in">this</span>.element.detachEvent) &#123;<br>            <span class="hljs-built_in">this</span>.element.detachEvent(<span class="hljs-string">&#x27;on&#x27;</span> + type, handler);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-built_in">this</span>.element[<span class="hljs-string">&#x27;on&#x27;</span> + type] = <span class="hljs-literal">null</span>;<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 阻止事件 （主要是事件冒泡，IE不支持事件捕获）</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">stopPropagation</span>(<span class="hljs-params">ev</span>) </span>&#123;<br>    <span class="hljs-keyword">if</span>(ev.stopPropagation) &#123;<br>        ev.stopPropagation();<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        ev.cancelBubble = <span class="hljs-literal">true</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 取消事件默认行为</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">preventDefault</span>(<span class="hljs-params">ev</span>) </span>&#123;<br>    <span class="hljs-keyword">if</span>(ev.preventDefault) &#123;<br>        ev.preventDefault();<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        ev.returnValue = <span class="hljs-literal">false</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
     </div>
 </div>
 <style>
@@ -288,19 +299,12 @@
 </script>
 <div class="Last-Next">
     
-    <a href="/2021/07/29/20210729_bomEvent/">
-        <div class="last">
-            <span>上一篇</span>
-            <p>浏览器事件 - 实现一个兼容多浏览器的绑定事件</p>
-        </div>
-    </a>
-    
 
     
-    <a href="/2021/07/22/20210722_promise/">
+    <a href="/2021/07/26/20210726_ajax/">
         <div class="next">
             <span>下一篇</span>
-            <p>PromiseA+规范 - 手写promise</p>
+            <p>浏览器请求 - ajax和fetch</p>
         </div>
     </a>
     
